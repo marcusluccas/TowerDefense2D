@@ -29,6 +29,7 @@ public class EnemyMovement : MonoBehaviour
         currHP -= demage;
         if (currHP <= 0)
         {
+            WaveManager.instance.nMonsterLeft--;
             Destroy(gameObject);
         }
     }
