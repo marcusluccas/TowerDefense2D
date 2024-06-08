@@ -6,6 +6,14 @@ public class Projectile : MonoBehaviour
 {
     public float projectileDemage;
     public Transform target;
+
+    public bool isCanon = false;
+    public float projectileRadius;
+
+    public bool isSlow = false;
+
+    public bool isPoison = false;
+    public float poisonStacks;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +38,30 @@ public class Projectile : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             collision.gameObject.GetComponent<EnemyMovement>().TakeDemage(projectileDemage);
+
+            if (isCanon)
+            {
+                Collider2D[] enemys = Physics2D.OverlapCircleAll(transform.position, projectileRadius);
+
+                foreach (Collider2D col in enemys)
+                {
+                    if (col.gameObject.tag == "Enemy")
+                    {
+                        col.gameObject.GetComponent<EnemyMovement>().TakeDemage(projectileDemage);
+                    }
+                }
+            }
+
+            if (isSlow)
+            {
+                collision.gameObject.GetComponent<EnemyMovement>().speed *= 0.8f;
+            }
+
+            if (isPoison)
+            {
+                collision.gameObject.GetComponent<EnemyMovement>().poisonStacks += poisonStacks;
+            }
+
             Destroy(this.gameObject);
         }
     }

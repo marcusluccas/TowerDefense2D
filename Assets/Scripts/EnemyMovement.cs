@@ -11,6 +11,9 @@ public class EnemyMovement : MonoBehaviour
 
     public float speed;
 
+    public float poisonStacks;
+    public float poisonCooldown;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +27,11 @@ public class EnemyMovement : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, MapPointManager.instance.mapPoints[nextPoint].position, speed * Time.deltaTime);
     }
 
+    private void FixedUpdate()
+    {
+        IsPoisoned();
+    }
+
     public void TakeDemage(float demage)
     {
         currHP -= demage;
@@ -31,6 +39,19 @@ public class EnemyMovement : MonoBehaviour
         {
             WaveManager.instance.nMonsterLeft--;
             Destroy(gameObject);
+        }
+    }
+
+    void IsPoisoned()
+    {
+        if (poisonStacks > 0)
+        {
+            poisonCooldown += Time.deltaTime;
+            if (poisonCooldown > 1)
+            {
+                TakeDemage(poisonStacks);
+                poisonCooldown = 0;
+            }
         }
     }
 }

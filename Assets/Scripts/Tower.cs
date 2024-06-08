@@ -28,7 +28,7 @@ public class Tower : MonoBehaviour
         attackCooldown += Time.deltaTime;
         if (attackCooldown > attackSpeed)
         {
-            if (targetEnemy == null)
+            if (targetEnemy == null || Vector3.Distance(transform.position, targetEnemy.transform.position) > attackRange)
             {
                 targetEnemy = FindTarget();
             }
