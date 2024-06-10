@@ -9,6 +9,8 @@ public class EnemyMovement : MonoBehaviour
     public float maxHP;
     public float currHP;
 
+    public int enemyGold;
+
     public float speed;
 
     public float poisonStacks;
@@ -38,6 +40,8 @@ public class EnemyMovement : MonoBehaviour
         if (currHP <= 0)
         {
             WaveManager.instance.nMonsterLeft--;
+            WaveManager.instance.playerMoney += enemyGold;
+            WaveManager.instance.UpdateHUD();
             Destroy(gameObject);
         }
     }

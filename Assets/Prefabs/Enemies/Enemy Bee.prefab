@@ -101,7 +101,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 50
   currHP: 0
+  enemyGold: 2
   speed: 1
+  poisonStacks: 0
+  poisonCooldown: 0
 --- !u!58 &3650505888299891921
 CircleCollider2D:
   m_ObjectHideFlags: 0

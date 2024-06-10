@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
+    public int towerPrice;
     public float attackDemage;
     public float attackSpeed;
     public float attackRange;
     public GameObject projetile;
     public float attackCooldown = 0;
     public GameObject targetEnemy;
+
+    public bool isBuilding = false;
+    int blockCount = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +24,18 @@ public class Tower : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Shoot();
+        if (isBuilding == false)
+        {
+            Shoot();
+        }
+    }
+
+    private void Update()
+    {
+        if (isBuilding)
+        {
+            BuildingMode();
+        }
     }
 
     void Shoot()
@@ -53,5 +68,50 @@ public class Tower : MonoBehaviour
             }
         }
         return null;
+    }
+
+    void BuildingMode()
+    {
+        transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0f);
+
+        if (blockCount <= 0 && WaveManager.instance.playerMoney >= towerPrice)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                isBuilding = false;
+                WaveManager.instance.playerMoney -= towerPrice;
+                WaveManager.instance.UpdateHUD();
+                BuildingManager.instance.buildingUI.SetActive(true);
+                gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            BuildingManager.instance.buildingUI.SetActive(true);
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Blocked")
+        {
+            blockCount++;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Blocked")
+        {
+            blockCount--;
+        }
     }
 }

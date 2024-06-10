@@ -56,7 +56,7 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    void UpdateHUD()
+    public void UpdateHUD()
     {
         playerHPText.text = "HP: " + playerHP.ToString();
         playerMoneyText.text = "$" + playerMoney.ToString();
